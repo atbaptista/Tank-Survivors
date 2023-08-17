@@ -31,6 +31,17 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Spawning")
 	int32 NumberEnemiesToSpawn = 1;
 
+	//Wall References
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Walls")
+	AActor* WestWall;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Walls")
+	AActor* EastWall;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Walls")
+	AActor* NorthWall;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Walls")
+	AActor* SouthWall;
+	
+
 private:
 	APawn* Player;
 	int32 WaveNumber = 0;
@@ -40,7 +51,6 @@ private:
 	TArray<TSubclassOf<ATower>> EnemiesToSpawn;
 	FTimerHandle EnemySpawnTimerHandle;
 	void SpawnEnemies();
-	int32 SpawnerMinDistance = 2000;
-	int32 SpawnerMaxDistance = 3000;
+	FVector GenerateSpawnPoint();
 	
 };

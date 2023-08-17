@@ -37,51 +37,43 @@ void AEnemySpawner::SpawnEnemies()
 		return;
 	}
 	
-	//TODO: spawn enemies around player
+	//spawn enemies randomly in map
+
 	for(int i = 0; i < NumberEnemiesToSpawn; i++)
 	{
-		//find random spawn location within cube x distance away from player
-		//this finds random spawn point in outer 4 corner areas of the cube
-		FVector center = Player->GetActorLocation();
-		center.Z = 0;
-		//generate number between 0 and 1000
-		int32 Offset = SpawnerMaxDistance - SpawnerMinDistance;
-		int32 XCoord = FMath::RandRange(0, Offset);
-		int32 YCoord = FMath::RandRange(0, Offset);
-
-		//spawn on left or right of center
-		if(FMath::RandRange(-1, 1) > 0)
-		{
-			XCoord = center.X + SpawnerMinDistance + XCoord;
-		}
-		else
-		{
-			XCoord = center.X - SpawnerMinDistance - XCoord;
-		}
-
-		//spawn on top or bottom
-		if(FMath::RandRange(-1, 1) > 0)
-		{
-			YCoord = center.Y + SpawnerMinDistance + YCoord;
-		}
-		else
-		{
-			YCoord = center.Y - SpawnerMinDistance - YCoord;
-		}
-
-		//Clamp the X and Y coords to the boundaries of the map
-		//min y = -7500 max y = 2400
-		//min x = -7400  max x = 2400
-		FVector EnemySpawnLocation = FVector(FMath::Clamp(XCoord, -7350, 2350), FMath::Clamp(YCoord, -7450, 2350), 81);
-		DrawDebugSphere(GetWorld(), EnemySpawnLocation, 25.f, 12, FColor::Red, true);
+		FVector EnemySpawnLocation = GenerateSpawnPoint();
+		
 		if(EnemiesToSpawn[0])
 		{
 			ATower* EnemySpawned = GetWorld()->SpawnActor<ATower>(
-				EnemiesToSpawn[0],
-				EnemySpawnLocation,
-				FRotator::ZeroRotator);
+			EnemiesToSpawn[0],
+			EnemySpawnLocation,
+			FRotator::ZeroRotator);
+			if(!EnemySpawned)
+			{
+				//DrawDebugSphere(GetWorld(), EnemySpawnLocation, 25.f, 12, FColor::Red, true);
+				i--;
+			}
 		}
-		
-		//UE_LOG(LogTemp, Display, TEXT("Spawned Enemy #%i"), i);
 	}
+}
+
+FVector AEnemySpawner::GenerateSpawnPoint()
+{
+	if(!WestWall || !EastWall || !NorthWall || !SouthWall)
+	{
+		UE_LOG(LogTemp, Error, TEXT("ERROR: MAP BOUNDS NOT SET IN EDITOR"));
+		return FVector::ZeroVector;
+	}
+	
+	int32 XCoord = 0;
+	int32 YCoord = 0;
+		
+	XCoord = FMath::RandRange(WestWall->GetActorLocation().X, EastWall->GetActorLocation().X);
+	XCoord = FMath::Clamp(XCoord, WestWall->GetActorLocation().X + 200, EastWall->GetActorLocation().X - 200);
+		
+	YCoord = FMath::RandRange(SouthWall->GetActorLocation().Y, NorthWall->GetActorLocation().Y);
+	YCoord = FMath::Clamp(YCoord, SouthWall->GetActorLocation().Y + 200, NorthWall->GetActorLocation().Y - 200);
+
+	return FVector(XCoord, YCoord, 81);
 }
