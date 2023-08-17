@@ -41,6 +41,7 @@ void AEnemySpawner::SpawnEnemies()
 	for(int i = 0; i < NumberEnemiesToSpawn; i++)
 	{
 		//find random spawn location within cube x distance away from player
+		//this finds random spawn point in outer 4 corner areas of the cube
 		FVector center = Player->GetActorLocation();
 		center.Z = 0;
 		//generate number between 0 and 1000
@@ -71,8 +72,8 @@ void AEnemySpawner::SpawnEnemies()
 		//Clamp the X and Y coords to the boundaries of the map
 		//min y = -7500 max y = 2400
 		//min x = -7400  max x = 2400
-		FVector EnemySpawnLocation = FVector(FMath::Clamp(XCoord, -73500, 2350), FMath::Clamp(YCoord, -7450, 2350), 0);
-		//DrawDebugSphere(GetWorld(), EnemySpawnLocation, 25.f, 12, FColor::Red, true);
+		FVector EnemySpawnLocation = FVector(FMath::Clamp(XCoord, -7350, 2350), FMath::Clamp(YCoord, -7450, 2350), 81);
+		DrawDebugSphere(GetWorld(), EnemySpawnLocation, 25.f, 12, FColor::Red, true);
 		if(EnemiesToSpawn[0])
 		{
 			ATower* EnemySpawned = GetWorld()->SpawnActor<ATower>(
