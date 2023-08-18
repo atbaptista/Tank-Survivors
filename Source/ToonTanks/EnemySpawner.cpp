@@ -41,24 +41,35 @@ void AEnemySpawner::SpawnEnemies()
 
 	for(int i = 0; i < NumberEnemiesToSpawn; i++)
 	{
-		FVector EnemySpawnLocation = GenerateSpawnPoint();
-		
 		if(EnemiesToSpawn[0])
 		{
 			ATower* EnemySpawned = GetWorld()->SpawnActor<ATower>(
 			EnemiesToSpawn[0],
-			EnemySpawnLocation,
+			FVector(0,0,1000),
 			FRotator::ZeroRotator);
+
+			//spawned enemy inside of a wall or another object
 			if(!EnemySpawned)
 			{
 				//DrawDebugSphere(GetWorld(), EnemySpawnLocation, 25.f, 12, FColor::Red, true);
 				i--;
+				if(i < 25)
+				{
+					break;
+				}
 			}
+			else
+			{
+				FVector EnemySpawnLocation = GenerateSpawnPoint(EnemySpawned);
+				EnemySpawned->SetActorLocation(EnemySpawnLocation);
+			}
+
 		}
 	}
 }
 
-FVector AEnemySpawner::GenerateSpawnPoint()
+//generates random X and Y values, sets Z Value to be above the floor
+FVector AEnemySpawner::GenerateSpawnPoint(AActor* Enemy)
 {
 	if(!WestWall || !EastWall || !NorthWall || !SouthWall)
 	{
@@ -75,5 +86,5 @@ FVector AEnemySpawner::GenerateSpawnPoint()
 	YCoord = FMath::RandRange(SouthWall->GetActorLocation().Y, NorthWall->GetActorLocation().Y);
 	YCoord = FMath::Clamp(YCoord, SouthWall->GetActorLocation().Y + 200, NorthWall->GetActorLocation().Y - 200);
 
-	return FVector(XCoord, YCoord, 81);
+	return FVector(XCoord, YCoord, Enemy->GetSimpleCollisionHalfHeight());
 }

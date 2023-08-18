@@ -51,6 +51,6 @@ private:
 	TArray<TSubclassOf<ATower>> EnemiesToSpawn;
 	FTimerHandle EnemySpawnTimerHandle;
 	void SpawnEnemies();
-	FVector GenerateSpawnPoint();
+	FVector GenerateSpawnPoint(AActor* Enemy);
 	
 };
