@@ -23,6 +23,10 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+	UPROPERTY(EditDefaultsOnly, Category = "Death")
+	TSubclassOf<class ACoin> CoinClass;
+
+	
 	class ATank* Tank;
 
 	UPROPERTY(EditAnywhere, Category = "Combat")

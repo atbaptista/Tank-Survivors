@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Coin.generated.h"
 
+
 UCLASS()
 class TOONTANKS_API ACoin : public AActor
 {
@@ -24,7 +25,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere, Category = "Movement")
-	float TurnRate = 50.f;
+	float TurnRate = 100.f;
 	UPROPERTY(EditAnywhere, Category = "Movement")
 	float FloatingAmplitude = 30.f;
 	UPROPERTY(EditAnywhere, Category = "Movement")
@@ -38,18 +39,16 @@ public:
 private:
 	UPROPERTY(EditAnywhere, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	UMeshComponent* CoinMeshComponent;
+	UPROPERTY(EditAnywhere, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	class UCapsuleComponent* CapsuleComp;
 	FVector InitialLocation;
 
 	FTimerHandle DespawnTimerHandler;
 	void Die();
-	
-	//collision
-	UFUNCTION()
-	void OnOverlap(UPrimitiveComponent* OverlappedComponent, 
-					  AActor* OtherActor, 
-					  UPrimitiveComponent* OtherComp, 
-					  int32 OtherBodyIndex, 
-					  bool bFromSweep, 
-					  const FHitResult &SweepResult);
-	
+
+	class ATank* TankPlayer;
+	class AToonTanksPlayerController* TankPlayerController;
+
+	void BobSpin(float DeltaTime);
+	void CheckDistance();
 };

@@ -5,6 +5,7 @@
 #include "Tank.h"
 #include "Kismet/GameplayStatics.h"
 #include "TimerManager.h"
+#include "Coin.h"
 
 void ATower::BeginPlay()
 {
@@ -31,6 +32,7 @@ void ATower::Tick(float DeltaTime)
 void ATower::HandleDestruction()
 {
 	Super::HandleDestruction();
+	ACoin* Coin = GetWorld()->SpawnActor<ACoin>(CoinClass, GetActorLocation(), GetActorRotation());
 	Destroy();
 }
 

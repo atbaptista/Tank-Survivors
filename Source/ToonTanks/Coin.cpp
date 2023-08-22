@@ -5,6 +5,7 @@
 #include "Tank.h"
 #include "ToonTanksPlayerController.h"
 #include "Kismet/GameplayStatics.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 ACoin::ACoin()
@@ -13,9 +14,9 @@ ACoin::ACoin()
 	PrimaryActorTick.bCanEverTick = true;
 	
 	CoinMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CoinMesh"));
-
-	//FloatingAmplitude = 50.0f; // Adjust as needed
-	//FloatingSpeed = 1.0f; // Adjust as needed
+	CapsuleComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComp"));
+	RootComponent = CapsuleComp;
+	CoinMeshComponent->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -25,7 +26,8 @@ void ACoin::BeginPlay()
 	InitialLocation = GetActorLocation();
 	GetWorldTimerManager().SetTimer(DespawnTimerHandler, this, &ACoin::Die, DespawnTime,false);
 
-	CoinMeshComponent->OnComponentBeginOverlap.AddDynamic(this, &ACoin::OnOverlap);
+	TankPlayer = Cast<ATank>(UGameplayStatics::GetPlayerPawn(this, 0));
+	TankPlayerController = Cast<AToonTanksPlayerController>(UGameplayStatics::GetPlayerController(this, 0));
 }
 
 // Called every frame
@@ -33,14 +35,9 @@ void ACoin::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//rotate
-	FRotator Rotation = FRotator::ZeroRotator;
-	Rotation.Roll = TurnRate * DeltaTime;
-	AddActorLocalRotation(Rotation, true);
+	BobSpin(DeltaTime);
+	CheckDistance();
 
-	//bob
-	FVector NewLocation = InitialLocation + FVector(0.0f, 0.0f, FloatingAmplitude * FMath::Sin(FloatingSpeed * GetGameTimeSinceCreation()));
-	SetActorLocation(NewLocation);
 }
 
 void ACoin::Die()
@@ -48,22 +45,30 @@ void ACoin::Die()
 	Destroy();
 }
 
-void ACoin::OnOverlap(UPrimitiveComponent* OverlappedComponent, 
-					  AActor* OtherActor, 
-					  UPrimitiveComponent* OtherComp, 
-					  int32 OtherBodyIndex, 
-					  bool bFromSweep, 
-					  const FHitResult &SweepResult)
+void ACoin::BobSpin(float DeltaTime)
 {
-	
-	if(ATank* Player = Cast<ATank>(OtherActor))
+	//rotate
+	FRotator Rotation = FRotator::ZeroRotator;
+	Rotation.Yaw = TurnRate * DeltaTime;
+	AddActorLocalRotation(Rotation, true);
+
+	//bob
+	FVector NewLocation = InitialLocation + FVector(0.0f, 0.0f, FloatingAmplitude * FMath::Sin(FloatingSpeed * GetGameTimeSinceCreation()));
+	SetActorLocation(NewLocation);
+}
+
+void ACoin::CheckDistance()
+{
+	//check distance to player
+	if(!TankPlayer)
 	{
-		UE_LOG(LogTemp, Error, TEXT("OVERLAPPED %s"), *OtherActor->GetActorNameOrLabel());
-		AToonTanksPlayerController* PlayerController = Cast<AToonTanksPlayerController>(UGameplayStatics::GetPlayerController(this, 0));
-		PlayerController->AddGold(Value);
+		return;
+	}
+	if(FVector::Dist(GetActorLocation(), TankPlayer->GetActorLocation()) <= TankPlayerController->GetGoldPickUpDistance())
+	{
+		TankPlayerController->AddGold(Value);
 		Destroy();
 	}
-	
 }
 
 

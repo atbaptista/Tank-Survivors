@@ -17,8 +17,18 @@ class TOONTANKS_API AToonTanksPlayerController : public APlayerController
 public:
 
 	void SetPlayerEnabledState(bool bPlayerEnabled);
-	void AddGold(int32 Value);
 
+
+private:
 	UPROPERTY(VisibleAnywhere, Category = "Player")
 	int32 Gold = 0;
+	UPROPERTY(EditAnywhere, Category = "Player")
+	float GoldPickUpDistance = 50.f;
+
+public:
+	//getters and setters for Gold and pickup radius
+	[[nodiscard]] int32 GetGold() const {return Gold;}
+	void AddGold(int32 Value){Gold += Value; UE_LOG(LogTemp, Display, TEXT("Score: %i"), Gold)}
+	[[nodiscard]] float GetGoldPickUpDistance() const {return GoldPickUpDistance;}
+	void AddGoldPickUpDistance(float Add){this->GoldPickUpDistance += Add;}
 };
