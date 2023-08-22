@@ -17,4 +17,8 @@ class TOONTANKS_API AToonTanksPlayerController : public APlayerController
 public:
 
 	void SetPlayerEnabledState(bool bPlayerEnabled);
+	void AddGold(int32 Value);
+
+	UPROPERTY(VisibleAnywhere, Category = "Player")
+	int32 Gold = 0;
 };

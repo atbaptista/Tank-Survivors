@@ -15,3 +15,8 @@ void AToonTanksPlayerController::SetPlayerEnabledState(bool bPlayerEnabled)
 	}
 	bShowMouseCursor = bPlayerEnabled;
 }
+
+void AToonTanksPlayerController::AddGold(int32 Value)
+{
+	Gold += Value;
+}
