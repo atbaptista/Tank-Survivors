@@ -21,6 +21,9 @@ protected:
 	void Fire();
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	class UCapsuleComponent* CapsuleComp;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	float ProjectileSpeed = 1000;
 	
 private:
 	

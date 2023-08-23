@@ -51,4 +51,7 @@ private:
 
 	void BobSpin(float DeltaTime);
 	void CheckDistance();
+
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	USoundBase* CoinSound;
 };

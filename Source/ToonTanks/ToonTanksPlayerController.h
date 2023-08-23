@@ -27,8 +27,14 @@ private:
 
 public:
 	//getters and setters for Gold and pickup radius
-	[[nodiscard]] int32 GetGold() const {return Gold;}
+	UFUNCTION(BlueprintCallable)
+	int32 GetGold() const {return Gold;}
+	UFUNCTION(BlueprintCallable)
 	void AddGold(int32 Value){Gold += Value; UE_LOG(LogTemp, Display, TEXT("Score: %i"), Gold)}
-	[[nodiscard]] float GetGoldPickUpDistance() const {return GoldPickUpDistance;}
+	UFUNCTION(BlueprintCallable)
+	float GetGoldPickUpDistance() const {return GoldPickUpDistance;}
+	UFUNCTION(BlueprintCallable)
 	void AddGoldPickUpDistance(float Add){this->GoldPickUpDistance += Add;}
+	UFUNCTION(BlueprintCallable)
+	float GetHealth();
 };

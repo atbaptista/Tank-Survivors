@@ -67,6 +67,11 @@ void ACoin::CheckDistance()
 	if(FVector::Dist(GetActorLocation(), TankPlayer->GetActorLocation()) <= TankPlayerController->GetGoldPickUpDistance())
 	{
 		TankPlayerController->AddGold(Value);
+		//play sound
+		if(CoinSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, CoinSound, GetActorLocation(), GetActorRotation());
+		}
 		Destroy();
 	}
 }
