@@ -26,6 +26,9 @@ void AToonTanksGameMode::ActorDied(AActor* DeadActor)
 		{
 			//GameOver(true);
 		}
+
+		ToonTanksPlayerController = Cast<AToonTanksPlayerController>(UGameplayStatics::GetPlayerController(this, 0));
+		ToonTanksPlayerController->EnemiesDefeated += 1;
 	}
 }
 

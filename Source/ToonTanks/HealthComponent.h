@@ -37,6 +37,9 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	float GetHealth() const{return Health;}
-
+	float GetMaxHealth() const{return MaxHealth;}
+	
+	void IncreaseMaxHealth(float Value);
+	void Heal(float Value);
 		
 };

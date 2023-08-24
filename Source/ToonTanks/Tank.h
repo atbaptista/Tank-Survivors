@@ -57,4 +57,22 @@ private:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	//upgrades
+	UFUNCTION(BlueprintCallable)
+	void HealTank(float Val);
+	UFUNCTION(BlueprintCallable)
+	void UpgradeMaxHealth(float Val);
+	UFUNCTION(BlueprintCallable)
+	void UpgradeSpeed(float Val);
+	UFUNCTION(BlueprintCallable)
+	void UpgradeFireRate(float Val);
+
+	//Stats
+	UFUNCTION(BlueprintCallable)
+	float GetFireRate(){return FireRate;}
+	UFUNCTION(BlueprintCallable)
+	float GetMaxHealth();
+	UFUNCTION(BlueprintCallable)
+	float GetHealth();
 };

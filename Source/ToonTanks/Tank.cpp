@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "HealthComponent.h"
 
 
 ATank::ATank()
@@ -90,3 +91,32 @@ void ATank::Fire()
 	GetWorldTimerManager().SetTimer(FireTimerHandle, this, &ATank::SwitchCanFire, FireRate);
 }
 
+void ATank::HealTank(float Val)
+{
+	Cast<UHealthComponent>(GetComponentByClass(UHealthComponent::StaticClass()))->Heal(Val);
+}
+
+void ATank::UpgradeMaxHealth(float Val)
+{
+	Cast<UHealthComponent>(GetComponentByClass(UHealthComponent::StaticClass()))->IncreaseMaxHealth(Val);
+}
+
+void ATank::UpgradeSpeed(float Val)
+{
+	Speed += Val;
+}
+
+void ATank::UpgradeFireRate(float Val)
+{
+	FireRate -= Val;
+}
+
+float ATank::GetMaxHealth()
+{
+	return Cast<UHealthComponent>(GetComponentByClass(UHealthComponent::StaticClass()))->GetMaxHealth();
+}
+
+float ATank::GetHealth()
+{
+	return Cast<UHealthComponent>(GetComponentByClass(UHealthComponent::StaticClass()))->GetHealth();
+}

@@ -2,7 +2,6 @@
 
 
 #include "ToonTanksPlayerController.h"
-
 #include "HealthComponent.h"
 
 void AToonTanksPlayerController::SetPlayerEnabledState(bool bPlayerEnabled)
@@ -16,6 +15,17 @@ void AToonTanksPlayerController::SetPlayerEnabledState(bool bPlayerEnabled)
 		GetPawn()->DisableInput(this);
 	}
 	bShowMouseCursor = bPlayerEnabled;
+}
+
+void AToonTanksPlayerController::AddGold(int32 Value)
+{
+	Gold += Value;
+	if(Gold % UpgradeEveryXGold == 0 && Gold != 0)
+	{
+		ActivateUpgradeMenu();
+
+		//TODO: increment the UpgradeEveryXGold value
+	}
 }
 
 float AToonTanksPlayerController::GetHealth()

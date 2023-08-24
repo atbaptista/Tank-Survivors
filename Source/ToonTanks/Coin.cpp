@@ -64,6 +64,7 @@ void ACoin::CheckDistance()
 	{
 		return;
 	}
+	//add gold to player if close enough
 	if(FVector::Dist(GetActorLocation(), TankPlayer->GetActorLocation()) <= TankPlayerController->GetGoldPickUpDistance())
 	{
 		TankPlayerController->AddGold(Value);

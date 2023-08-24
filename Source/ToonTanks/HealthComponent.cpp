@@ -36,8 +36,19 @@ void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	// ...
 }
 
+void UHealthComponent::IncreaseMaxHealth(float Value)
+{
+	MaxHealth += Value;
+}
+
+void UHealthComponent::Heal(float Value)
+{
+	Health += Value;
+	Health = FMath::Clamp(Health, 0, MaxHealth);
+}
+
 void UHealthComponent::DamageTaken(AActor* DamagedActor, float Damage, const UDamageType* DamageType,
-	AController* Instigator, AActor* DamageCauser)
+                                   AController* Instigator, AActor* DamageCauser)
 {
 	if (Damage <= 0.f) return;
 	
